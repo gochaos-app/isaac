@@ -24,5 +24,7 @@ In prompt mode, you can use isaac to made a simple query and get a response
 ```
 isaac prompt "write a 3 line paragraph about AWS and how can it help my customers"
 
-AWS is a comprehensive suite of cloud computing services that can help my customers reduce costs, improve efficiency, and scale their businesses. With AWS, my customers can access a wide range of computing, storage, and networking resources, allowing them to focus on their core businesses rather than on infrastructure management. AWS also offers a wide range of tools and features to help my customers manage their infrastructure, including identity and access management, security, and automation.
+AWS is a comprehensive suite of cloud computing services that can help my customers reduce costs, improve efficiency, and scale their businesses. 
+With AWS, my customers can access a wide range of computing, storage, and networking resources, allowing them to focus on their core businesses rather than on infrastructure management. 
+AWS also offers a wide range of tools and features to help my customers manage their infrastructure, including identity and access management, security, and automation.
 ```
