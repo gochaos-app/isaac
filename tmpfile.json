@@ -1,0 +1,10 @@
+[
+    {
+        "prompt":"what hour is in vancouver canada",
+        "response":"\nThe current time in Vancouver, Canada is 8:30 PM. Please note that Daylight Saving Time (DST) is in effect in Canada, so the time shown may be adjusted by one hour during the DST period."
+    },
+    {
+        "prompt":"you know about bing",
+        "response":"\nYes, I'm familiar with Bing. It's Microsoft's search engine, launched in 2009 as a competitor to Google. Bing powers a variety of Microsoft services, including web, image, and video searches, as well as Microsoft's virtual assistant, Cortana. Bing uses a combination of algorithms and human editors to provide search results, and it also offers a variety of features, such as integration with Microsoft's other services, like Office and Outlook, and a tool called \"Bing Predicts\" that uses search data to make predictions about upcoming events."
+    }
+]

@@ -1,0 +1,47 @@
+package cmd
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strings"
+
+	"github.com/gochaos-app/isaac/ops"
+)
+
+func ChatGo() {
+	reader := bufio.NewReader(os.Stdin)
+	cfg := GetAwsCfg()
+	var entries []fileDB
+	for {
+		fmt.Print("@Isaac: ")
+		cmdStr, err := reader.ReadString('\n')
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+		}
+
+		cmdStr = strings.TrimSuffix(cmdStr, "\n")
+
+		if len(ops.FindSys(cmdStr)) > 2 {
+			subArray := ops.FindSys(cmdStr)
+			if subArray[1] == "sys." {
+				switch subArray[2] {
+				//   Special commands for isaac
+				case "exit":
+					fmt.Println("Goodbye!")
+					os.Exit(0)
+				case "save":
+					fmt.Println("Saving...")
+					savePrompts(entries)
+				case "":
+					fmt.Println("No command found")
+				default:
+					fmt.Println("Command not found")
+				}
+			}
+		} else {
+			response := ChatBD(cmdStr, cfg)
+			entries = append(entries, fileDB{Prompt: cmdStr, Response: response})
+		}
+	}
+}
