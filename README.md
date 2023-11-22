@@ -19,6 +19,8 @@ Saving...
 Goodbye!
 ```
 
+file get saved in working directory and is named `prompts.json`
+
 In prompt mode, you can use isaac to made a simple query and get a response
 
 ```
