@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"os/exec"
 	"strings"
 
 	"github.com/gochaos-app/isaac/ops"
@@ -39,6 +40,13 @@ func ChatGo() {
 					fmt.Println("Command not found")
 				}
 			}
+		} else if len(ops.FindCmdIgnoreParams(cmdStr)) > 1 {
+			cmdSlice := strings.Fields(ops.FindCmdIgnoreParams(cmdStr)[1])
+			cmd := exec.Command(cmdSlice[0], cmdSlice[1:]...)
+			cmd.Stdout = os.Stdout
+			cmd.Stderr = os.Stderr
+			fmt.Println(cmd.Run())
+
 		} else {
 			response := ChatBD(cmdStr, cfg)
 			entries = append(entries, fileDB{Prompt: cmdStr, Response: response})

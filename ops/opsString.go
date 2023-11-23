@@ -9,3 +9,9 @@ func FindSys(cmdStr string) []string {
 	matches := rx.FindStringSubmatch(cmdStr)
 	return matches
 }
+
+func FindCmdIgnoreParams(cmdStr string) []string {
+	rx := regexp.MustCompile(`cmd\(([^)]*)\)`)
+	matches := rx.FindStringSubmatch(cmdStr)
+	return matches
+}

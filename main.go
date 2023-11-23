@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/gochaos-app/isaac/exec"
+	"github.com/gochaos-app/isaac/cli"
 )
 
 func main() {
-	exec.InitCli()
+	cli.InitCli()
 }
