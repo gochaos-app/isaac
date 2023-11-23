@@ -12,6 +12,12 @@ isaac chat
 
 To check the running processes in Linux, you can use the "top" command. This command provides a real-time view of the running processes and their resource usage, such as CPU, memory, and disk I/O. You can also use the "ps" command to list the currently running processes. Additionally, you can use the "htop" command, which is a more advanced and interactive version of top.
 
+@Isaac: cmd(ps)
+    PID TTY          TIME CMD
+     52 pts/2    00:00:00 sh
+     17 pts/2    00:00:00 isaac
+     23 pts/2    00:00:00 ps
+
 @Isaac: sys.save
 Saving...
 
@@ -19,7 +25,7 @@ Saving...
 Goodbye!
 ```
 
-file get saved in working directory and is named `prompts.json`
+File (only includes prompts and answers) get saved in working directory and is named `prompts.json`
 
 In prompt mode, you can use isaac to made a simple query and get a response
 
