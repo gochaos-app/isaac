@@ -10,9 +10,10 @@ import (
 	"github.com/gochaos-app/isaac/ops"
 )
 
-func ChatGo() {
+func ChatGo(config *AWSConfig) {
+	region := config.Region
 	reader := bufio.NewReader(os.Stdin)
-	cfg := GetAwsCfg()
+	cfg := GetAwsCfg(region)
 	var entries []fileDB
 	for {
 		fmt.Print("@Isaac: ")
@@ -48,7 +49,7 @@ func ChatGo() {
 			fmt.Println(cmd.Run())
 
 		} else {
-			response := ChatBD(cmdStr, cfg)
+			response := ChatBD(cmdStr, config.Model, config.Tokens, config.Temperature, cfg)
 			entries = append(entries, fileDB{Prompt: cmdStr, Response: response})
 		}
 	}

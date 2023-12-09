@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"strconv"
 
 	"encoding/json"
 
@@ -12,26 +13,27 @@ import (
 )
 
 type Request struct {
-	Prompt        string   `json:"prompt"`
-	MaxTokens     int      `json:"maxTokens"`
-	Temperature   float64  `json:"temperature,omitempty"`
-	TopP          float64  `json:"topP,omitempty"`
+	Prompt      string  `json:"prompt"`
+	MaxTokens   int     `json:"maxTokens"`
+	Temperature float64 `json:"temperature,omitempty"`
+
 	StopSequences []string `json:"stop_sequences,omitempty"`
 }
 
-func ChatBD(cmdStr string, cfg aws.Config) string {
+func ChatBD(cmdStr, model, tokens, temperature string, cfg aws.Config) string {
 	brc := bedrockruntime.NewFromConfig(cfg)
+	tokensInt, _ := strconv.Atoi(tokens)
+	temperature64, _ := strconv.ParseFloat(temperature, 64)
 	payload := Request{
 		Prompt:      cmdStr,
-		MaxTokens:   200,
-		Temperature: 0.5,
-		TopP:        1,
+		MaxTokens:   tokensInt,
+		Temperature: temperature64,
 	}
 	payloadJson, err := json.Marshal(payload)
 	if err != nil {
 		log.Fatal(err)
 	}
-	modelId := "ai21.j2-ultra-v1"
+	modelId := model
 	TypeContent := "application/json"
 	AcceptContent := "*/*"
 	output, err := brc.InvokeModel(context.Background(),
