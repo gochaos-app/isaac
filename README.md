@@ -4,7 +4,25 @@ Isaac is a basic CLI with AI integrated.
 
 Isaac has two modes, chat and prompt mode.
 
-In chat mode, Isaac will run commands in the background and can also save the prompts to a json file. 
+```
+NAME:
+   Isaac -  CLI that can help you on various tasks
+
+USAGE:
+   Isaac [global options] command [command options] [arguments...]
+
+COMMANDS:
+   init, i    Initialize Isaac
+   chat, c    Chat with Isaac
+   prompt, p  make a simple prompt, prompt should be enclosed in quotes
+   help, h    Shows a list of commands or help for one command
+```
+
+The first command to run is `isaac init` this sets up the config file `$HOME/.isaac_config.json`, this command can setup custom data or setting defaults values.
+
+
+
+In chat mode, Isaac will run commands in the background and can also save the prompts to a json file. Isaac is capable to load, read and make a summary of text files, with the special command `load()`
 ```
 isaac chat
 
@@ -18,11 +36,22 @@ To check the running processes in Linux, you can use the "top" command. This com
      17 pts/2    00:00:00 isaac
      23 pts/2    00:00:00 ps
 
+@Isaac: load(Makefile)
+
+The text defines a series of targets (dev, prod, install, compile, and move) with corresponding commands. The targets are specified using the syntax: target: command.
+
+The target "dev" runs the command "go build -o isaac .", which builds the Isaac executable and saves it in the isaac file. The target "prod" runs the same command as "dev", but also adds the "-ldflags" flag, which sets the build options for Isaac. The target "install" runs the "move" target, which moves the Isaac executable to the ~/bin directory.
+
+The target "compile" runs a series of commands for each operating system and platform combination, using the GOOS and GOARCH environment variables to specify the target system. The commands build the Isaac executable for each target system, saving it in the bin directory with the naming convention "isaac-[OS]-[ARCH]".
+
+In summary, the text defines a workflow for building and installing the Isaac executable on various operating systems and platforms.
+
 @Isaac: sys.save
 Saving...
 
 @Isaac: sys.exit
 Goodbye!
+
 ```
 
 File (only includes prompts and answers) get saved in working directory and is named `prompts.json`
@@ -36,3 +65,5 @@ AWS is a comprehensive suite of cloud computing services that can help my custom
 With AWS, my customers can access a wide range of computing, storage, and networking resources, allowing them to focus on their core businesses rather than on infrastructure management. 
 AWS also offers a wide range of tools and features to help my customers manage their infrastructure, including identity and access management, security, and automation.
 ```
+
+

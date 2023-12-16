@@ -48,6 +48,17 @@ func ChatGo(config *AWSConfig) {
 			cmd.Stderr = os.Stderr
 			fmt.Println(cmd.Run())
 
+		} else if len(ops.FindLoadIgnoreParams(cmdStr)) > 1 {
+			fileStr := ops.FindLoadIgnoreParams(cmdStr)[1]
+			txtFile, err := LoadFile(fileStr)
+			if err != nil {
+				fmt.Println("Error reading file")
+				return
+			}
+			txtFile = "make a summary of the following text: " + txtFile
+
+			response := ChatBD(txtFile, config.Model, config.Tokens, config.Temperature, cfg)
+			entries = append(entries, fileDB{Prompt: txtFile, Response: response})
 		} else {
 			response := ChatBD(cmdStr, config.Model, config.Tokens, config.Temperature, cfg)
 			entries = append(entries, fileDB{Prompt: cmdStr, Response: response})

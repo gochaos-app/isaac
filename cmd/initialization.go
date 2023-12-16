@@ -21,7 +21,8 @@ func FileInit() {
 	reader := bufio.NewReader(os.Stdin)
 
 	fmt.Println("This command will ask you for information to customize Isaac")
-	fmt.Println("Do you want to continue (yes/no)?? ")
+	fmt.Println("Do you want to continue? ")
+	fmt.Println("yes for custom config, anything else for default config")
 	response, _ := reader.ReadString('\n')
 
 	if response == "yes\n" {

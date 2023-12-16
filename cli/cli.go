@@ -60,9 +60,10 @@ func readFile() *cmd.AWSConfig {
 	homeEnv := os.Getenv("HOME")
 	filePath := homeEnv + "/.isaac_config.json"
 	_, error := os.Stat(filePath)
-	if error != nil {
-		fmt.Println("Config file already exists")
-		return nil
+	if os.IsNotExist(error) {
+		fmt.Println("Config file doesnt exists")
+		fmt.Println("Please run isaac init")
+		os.Exit(1)
 	}
 	// Open our jsonFile
 	jsonFile, err := os.ReadFile(filePath)

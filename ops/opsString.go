@@ -15,3 +15,9 @@ func FindCmdIgnoreParams(cmdStr string) []string {
 	matches := rx.FindStringSubmatch(cmdStr)
 	return matches
 }
+
+func FindLoadIgnoreParams(loadStr string) []string {
+	rx := regexp.MustCompile(`load\(([^)]*)\)`)
+	matches := rx.FindStringSubmatch(loadStr)
+	return matches
+}
