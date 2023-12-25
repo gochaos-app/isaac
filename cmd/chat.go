@@ -35,8 +35,19 @@ func ChatGo(config *AWSConfig) {
 				case "save":
 					fmt.Println("Saving...")
 					savePrompts(entries)
+				case "cmd":
+					cmdArray := subArray[3:]
+					cmdSlice := strings.Fields(cmdArray[0])
+					if len(cmdSlice) == 0 {
+						fmt.Println("No command found")
+					} else {
+						cmd := exec.Command(cmdSlice[0], cmdSlice[1:]...)
+						cmd.Stdout = os.Stdout
+						cmd.Stderr = os.Stderr
+						fmt.Println(cmd.Run())
+					}
 				case "":
-					fmt.Println("No command found")
+					fmt.Println("Command not found")
 				default:
 					fmt.Println("Command not found")
 				}
@@ -50,12 +61,23 @@ func ChatGo(config *AWSConfig) {
 
 		} else if len(ops.FindLoadIgnoreParams(cmdStr)) > 1 {
 			fileStr := ops.FindLoadIgnoreParams(cmdStr)[1]
-			txtFile, err := LoadFile(fileStr)
+			txtFile, err := ops.LoadFile(fileStr)
 			if err != nil {
 				fmt.Println("Error reading file")
 				return
 			}
 			txtFile = "make a summary of the following text: " + txtFile
+
+			response := ChatBD(txtFile, config.Model, config.Tokens, config.Temperature, cfg)
+			entries = append(entries, fileDB{Prompt: txtFile, Response: response})
+		} else if len(ops.MakeSummaryIgnoreParams(cmdStr)) > 1 {
+			fileStr := ops.MakeSummaryIgnoreParams(cmdStr)[1]
+			txtFile, err := ops.LoadFile(fileStr)
+			if err != nil {
+				fmt.Println("Error reading file")
+				return
+			}
+			txtFile = "Make a summary of the following text: " + txtFile
 
 			response := ChatBD(txtFile, config.Model, config.Tokens, config.Temperature, cfg)
 			entries = append(entries, fileDB{Prompt: txtFile, Response: response})
