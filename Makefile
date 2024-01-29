@@ -11,7 +11,13 @@ prod:
 move:
 	mv isaac ~/bin/isaac
 
+move-mac-m1:
+	mkdir -p ~/bin
+	mv isaac ~/bin/
+
 install: prod move
+
+install-mac-m1: prod move-mac-m1
 
 compile:
 	echo "Compiling for every OS and Platform"
