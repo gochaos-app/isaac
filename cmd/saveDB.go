@@ -7,20 +7,22 @@ import (
 )
 
 type fileDB struct {
-	Prompt   string `json:"prompt"`
-	Response string `json:"response"`
+	Prompt     string `json:"prompt"`
+	Completion string `json:"completion"`
 }
 
 func savePrompts(entries []fileDB) {
-	tmpfile, err := os.Create("prompts.json")
+	tmpfile, err := os.Create("prompts.jsonl")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer tmpfile.Close()
-
-	encoder := json.NewEncoder(tmpfile)
-	err = encoder.Encode(entries)
-	if err != nil {
-		log.Fatal(err)
+	for _, d := range entries {
+		jsonData, err := json.Marshal(d)
+		if err != nil {
+			log.Fatal(err)
+		}
+		tmpfile.WriteString(string(jsonData) + "\n")
 	}
+
 }

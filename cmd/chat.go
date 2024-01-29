@@ -17,6 +17,7 @@ func ChatGo(config *AWSConfig) {
 	var entries []fileDB
 	for {
 		fmt.Print("@Isaac: ")
+
 		cmdStr, err := reader.ReadString('\n')
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
@@ -35,6 +36,10 @@ func ChatGo(config *AWSConfig) {
 				case "save":
 					fmt.Println("Saving...")
 					savePrompts(entries)
+				case "s3save":
+					fmt.Println("Saving to S3...")
+					savePrompts(entries)
+					Save2S3(cfg, config.S3Bucket)
 				case "cmd":
 					cmdArray := subArray[3:]
 					cmdSlice := strings.Fields(cmdArray[0])
@@ -69,7 +74,7 @@ func ChatGo(config *AWSConfig) {
 			txtFile = "make a summary of the following text: " + txtFile
 
 			response := ChatBD(txtFile, config.Model, config.Tokens, config.Temperature, cfg)
-			entries = append(entries, fileDB{Prompt: txtFile, Response: response})
+			entries = append(entries, fileDB{Prompt: txtFile, Completion: response})
 		} else if len(ops.MakeSummaryIgnoreParams(cmdStr)) > 1 {
 			fileStr := ops.MakeSummaryIgnoreParams(cmdStr)[1]
 			txtFile, err := ops.LoadFile(fileStr)
@@ -80,10 +85,10 @@ func ChatGo(config *AWSConfig) {
 			txtFile = "Make a summary of the following text: " + txtFile
 
 			response := ChatBD(txtFile, config.Model, config.Tokens, config.Temperature, cfg)
-			entries = append(entries, fileDB{Prompt: txtFile, Response: response})
+			entries = append(entries, fileDB{Prompt: txtFile, Completion: response})
 		} else {
 			response := ChatBD(cmdStr, config.Model, config.Tokens, config.Temperature, cfg)
-			entries = append(entries, fileDB{Prompt: cmdStr, Response: response})
+			entries = append(entries, fileDB{Prompt: cmdStr, Completion: response})
 		}
 	}
 }
