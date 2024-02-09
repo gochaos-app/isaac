@@ -2,6 +2,8 @@
 
 Isaac is a basic CLI with AI integrated. 
 
+https://github.com/gochaos-app/isaac/assets/47430149/fd934c52-ef6b-453b-8bab-0572c8613b4e
+
 ## Introduction
 Isaac has two modes, chat and prompt mode.
 
