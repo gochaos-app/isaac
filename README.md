@@ -2,10 +2,7 @@
 
 Isaac is a basic CLI with AI integrated. 
 
-
-https://github.com/gochaos-app/isaac/assets/47430149/d6d07d26-cd47-4d8d-b1c0-2e4b677826de
-
-
+## Introduction
 Isaac has two modes, chat and prompt mode.
 
 ```
@@ -22,49 +19,70 @@ COMMANDS:
    help, h    Shows a list of commands or help for one command
 ```
 
-The first command to run is `isaac init` this sets up the config file `$HOME/.isaac_config.json`, this command can setup custom values or setting defaults values.
+Special commands in chat mode: 
+
+* **command**:    User can input what it wnats to do and Isaac will return a posssible command to use as well as ask for confirmation. 
+
+* **kubernetes**: Ask kubernetes related questions and the response will be a kubectl command as well with a brief explanation of the command.
+
+* **file**: load a file and ask for a summary or review general written code.
+* **save**: save the prompts in a file, default name `prompts.jsonl`.
+
+* **uploadS3**:  Upload prompts file to an s3 specified in init file.
 
 
-In chat mode, Isaac will run commands in the background and can also save the prompts to a json file. Isaac is capable to load, read and make a summary of text files, with the special command `load()` as well as execute OS commands with `cmd()`.
-```
+## Usage
+
+````markdown
 isaac chat
 
-@Isaac: Check the running process in linux    
+@Isaac →  Check the running process in linux    
 
 To check the running processes in Linux, you can use the "top" command. This command provides a real-time view of the running processes and their resource usage, such as CPU,
 memory, and disk I/O. You can also use the "ps" command to list the currently running processes. Additionally, you can use the "htop" command, which is a more advanced and
 interactive version of top.
 
-@Isaac: cmd(ps)
-    PID TTY          TIME CMD
-     52 pts/2    00:00:00 sh
-     17 pts/2    00:00:00 isaac
-     23 pts/2    00:00:00 ps
+@Isaac → command: check the running process in linux
 
-@Isaac: load(Makefile)
+```ps```
+Execute command? Only yes is accepted: 
+   ps   
+yes 
 
-The text defines a series of targets (dev, prod, install, compile, and move) with corresponding commands. The targets are specified using the syntax: target: command.
+PID TTY          TIME CMD
+52 pts/2    00:00:00 sh
+17 pts/2    00:00:00 isaac
+23 pts/2    00:00:00 ps
 
-The target "dev" runs the command "go build -o isaac .", which builds the Isaac executable and saves it in the isaac file.
-The target "prod" runs the same command as "dev", but also adds the "-ldflags" flag, which sets the build options for Isaac.
-The target "install" runs the "move" target, which moves the Isaac executable to the ~/bin directory.
+@Isaac → kubernetes: check for pods in default namespace
 
-The target "compile" runs a series of commands for each operating system and platform combination, using the GOOS and GOARCH environment variables to specify the target
-system. The commands build the Isaac executable for each target system, saving it in the bin directory with the naming convention "isaac-[OS]-[ARCH]".
+```
+kubectl get pods -n default
 
-In summary, the text defines a workflow for building and installing the Isaac executable on various operating systems and platforms.
+```
 
-@Isaac: sys.save
-Saving...
+This command will list all of the pods in the`default`namespace. The`-n`flag allows you to specify a specific namespace, and the`get pods`command lists all of the pods in that namespace.
+
+@Isaac → file:Makefile make a summary of this makefile
+File does exist
+
+The provided Makefile consists of a set of targets, each representing a specific action. The targets are organized into sections, denoted by labels like "dev", "prod", "install", and "compile".
+
+Targets starting with ".PHONY" are recognized as phony targets. Phony targets are used to indicate that a command or actions should be taken, rather than actually performing a specific task.
+
+Targets starting with "dev" are used to compile and build the "isaac" program. The "go build" command is used to compile the source code and build an executable binary, which is then placed in "~/bin/isaac".
+
+Targets starting with "prod" are used to compile and build the "isaac" program with additional options, specifically the "-ldflags" option, which is used to specify additional flags for the linker. The resulting binary is then placed in "~/bin/isaac".
+
+Targets starting with "install" are used to perform the installation and deployment of the "isaac" program. The "install" target first performs the "prod" target, and then performs the "move" target, which moves the compiled binary
+
 
 @Isaac: sys.exit
 Goodbye!
 
-```
+````
 
-Especial command `sys.save` saves the history (only includes prompts and answers) located in the working directory and is named `prompts.json`
-
-In prompt mode, you can use isaac to made a simple query and get a response
+### Prompt mode
 
 ```
 isaac prompt "write a 3 line paragraph about AWS and how can it help my customers"
