@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"encoding/json"
-	"log"
 	"os"
 )
 
@@ -11,18 +10,21 @@ type fileDB struct {
 	Completion string `json:"completion"`
 }
 
-func savePrompts(entries []fileDB) {
-	tmpfile, err := os.Create("prompts.jsonl")
+func savePrompts(name string) string {
+	if name == "" {
+		name = "prompts.jsonl"
+	}
+	tmpfile, err := os.Create(name)
 	if err != nil {
-		log.Fatal(err)
+		return err.Error()
 	}
 	defer tmpfile.Close()
 	for _, d := range entries {
 		jsonData, err := json.Marshal(d)
 		if err != nil {
-			log.Fatal(err)
+			return err.Error()
 		}
 		tmpfile.WriteString(string(jsonData) + "\n")
 	}
-
+	return "Prompts saved"
 }

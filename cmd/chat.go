@@ -4,91 +4,78 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"os/exec"
 	"strings"
 
 	"github.com/gochaos-app/isaac/ops"
 )
 
-func ChatGo(config *AWSConfig) {
-	region := config.Region
-	reader := bufio.NewReader(os.Stdin)
-	cfg := GetAwsCfg(region)
-	var entries []fileDB
-	for {
-		fmt.Print("@Isaac: ")
+type PromptFn func(string) string
 
-		cmdStr, err := reader.ReadString('\n')
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-		}
+var entries []fileDB
+
+func switchCommand(IsaacCmd, cmdStr string) string {
+	cmdMap := map[string]PromptFn{
+		"command":    cmdPromptFn,
+		"kubernetes": k8sPromptFn,
+		"file":       filePromptFn,
+		"save":       savePrompts,
+		"uploadS3":   Save2S3,
+	}
+	if _, cmdExists := cmdMap[IsaacCmd]; cmdExists {
+		return cmdMap[IsaacCmd](cmdStr)
+	} else {
+		fmt.Println("Command not found")
+		return "Command not found"
+	}
+}
+
+func ChatBedrock() {
+
+	reader := bufio.NewReader(os.Stdin)
+
+	for {
+
+		fmt.Print("@Isaac → ")
+		cmdStr, _ := reader.ReadString('\n')
 
 		cmdStr = strings.TrimSuffix(cmdStr, "\n")
 
-		if len(ops.FindSys(cmdStr)) > 2 {
-			subArray := ops.FindSys(cmdStr)
-			if subArray[1] == "sys." {
-				switch subArray[2] {
-				//   Special commands for isaac
-				case "exit":
-					fmt.Println("Goodbye!")
-					os.Exit(0)
-				case "save":
-					fmt.Println("Saving...")
-					savePrompts(entries)
-				case "s3save":
-					fmt.Println("Saving to S3...")
-					savePrompts(entries)
-					Save2S3(cfg, config.S3Bucket)
-				case "cmd":
-					cmdArray := subArray[3:]
-					cmdSlice := strings.Fields(cmdArray[0])
-					if len(cmdSlice) == 0 {
-						fmt.Println("No command found")
-					} else {
-						cmd := exec.Command(cmdSlice[0], cmdSlice[1:]...)
-						cmd.Stdout = os.Stdout
-						cmd.Stderr = os.Stderr
-						fmt.Println(cmd.Run())
-					}
-				case "":
-					fmt.Println("Command not found")
-				default:
-					fmt.Println("Command not found")
+		sysCmds := ops.FindSys(cmdStr)
+		//Check if user want to exit isaac
+		if len(sysCmds) > 2 {
+			if sysCmds[2] == "exit" || sysCmds[2] == "quit" {
+				fmt.Println("Goodbye!")
+				os.Exit(0)
+			}
+		}
+		//Start normal flow
+		arrayCmd := ops.FindInst(cmdStr)
+		if len(arrayCmd) == 1 {
+			//send input to bedrock
+			response := ChatBD(cmdStr)
+			entries = append(entries, fileDB{Prompt: cmdStr, Completion: response})
+
+		} else if len(arrayCmd) > 1 {
+			//CHeck if a special command was used other than exit and send the input to bedrock
+			response := switchCommand(arrayCmd[0], arrayCmd[1])
+			entries = append(entries, fileDB{Prompt: cmdStr, Completion: response})
+			// If the input is command ask if the user wants to execute the command
+			// If the user types yes, the command will be executed
+			if arrayCmd[0] == "command" {
+				cmd := ops.CleanCmd(response)
+				fmt.Println("Execute command? Only yes is accepted: " + cmd)
+				var userInput string
+				fmt.Scanf("%s", &userInput)
+				if userInput == "yes" {
+					executeCommand(cmd)
+				} else {
+					fmt.Println("Command not executed")
 				}
 			}
-		} else if len(ops.FindCmdIgnoreParams(cmdStr)) > 1 {
-			cmdSlice := strings.Fields(ops.FindCmdIgnoreParams(cmdStr)[1])
-			cmd := exec.Command(cmdSlice[0], cmdSlice[1:]...)
-			cmd.Stdout = os.Stdout
-			cmd.Stderr = os.Stderr
-			fmt.Println(cmd.Run())
-
-		} else if len(ops.FindLoadIgnoreParams(cmdStr)) > 1 {
-			fileStr := ops.FindLoadIgnoreParams(cmdStr)[1]
-			txtFile, err := ops.LoadFile(fileStr)
-			if err != nil {
-				fmt.Println("Error reading file")
-				return
-			}
-			txtFile = "make a summary of the following text: " + txtFile
-
-			response := ChatBD(txtFile, config.Model, config.Tokens, config.Temperature, cfg)
-			entries = append(entries, fileDB{Prompt: txtFile, Completion: response})
-		} else if len(ops.MakeSummaryIgnoreParams(cmdStr)) > 1 {
-			fileStr := ops.MakeSummaryIgnoreParams(cmdStr)[1]
-			txtFile, err := ops.LoadFile(fileStr)
-			if err != nil {
-				fmt.Println("Error reading file")
-				return
-			}
-			txtFile = "Make a summary of the following text: " + txtFile
-
-			response := ChatBD(txtFile, config.Model, config.Tokens, config.Temperature, cfg)
-			entries = append(entries, fileDB{Prompt: txtFile, Completion: response})
 		} else {
-			response := ChatBD(cmdStr, config.Model, config.Tokens, config.Temperature, cfg)
-			entries = append(entries, fileDB{Prompt: cmdStr, Completion: response})
+			return
 		}
+
 	}
+
 }

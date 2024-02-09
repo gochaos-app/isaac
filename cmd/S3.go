@@ -2,33 +2,32 @@ package cmd
 
 import (
 	"context"
-	"fmt"
-	"log"
 	"os"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
-func Save2S3(cfg aws.Config, bucket string) {
-
-	fileJsonl, err := os.Open("prompts.jsonl")
+func Save2S3(name string) string {
+	_, _, _, bucket, cfg := GetAwsCfg()
+	if name == "" {
+		name = "prompts.jsonl"
+	}
+	fileJsonl, err := os.Open(name)
 	if err != nil {
-		fmt.Println(err)
-		return
+		return err.Error()
 	}
 
 	defer fileJsonl.Close()
 	svc := s3.NewFromConfig(cfg)
 	_, err = svc.PutObject(context.TODO(), &s3.PutObjectInput{
 		Bucket: aws.String(bucket),
-		Key:    aws.String("prompts.jsonl"),
+		Key:    aws.String(name),
 		Body:   fileJsonl,
 	})
 	if err != nil {
-		fmt.Println(err)
-		return
+		return err.Error()
 	}
-	log.Println("Successfully uploaded to S3", bucket)
+	return "Successfully uploaded to S3 " + bucket
 
 }

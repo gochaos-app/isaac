@@ -20,7 +20,9 @@ type Request struct {
 	StopSequences []string `json:"stop_sequences,omitempty"`
 }
 
-func ChatBD(cmdStr, model, tokens, temperature string, cfg aws.Config) string {
+func ChatBD(cmdStr string) string {
+
+	model, tokens, temperature, _, cfg := GetAwsCfg()
 	brc := bedrockruntime.NewFromConfig(cfg)
 	tokensInt, _ := strconv.Atoi(tokens)
 	temperature64, _ := strconv.ParseFloat(temperature, 64)
@@ -33,13 +35,13 @@ func ChatBD(cmdStr, model, tokens, temperature string, cfg aws.Config) string {
 	if err != nil {
 		log.Fatal(err)
 	}
-	modelId := model
+
 	TypeContent := "application/json"
 	AcceptContent := "*/*"
 	output, err := brc.InvokeModel(context.Background(),
 		&bedrockruntime.InvokeModelInput{
 			Body:        payloadJson,
-			ModelId:     aws.String(modelId),
+			ModelId:     aws.String(model),
 			ContentType: aws.String(TypeContent),
 			Accept:      aws.String(AcceptContent),
 		})
