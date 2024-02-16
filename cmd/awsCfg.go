@@ -9,10 +9,11 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
+	initCfg "github.com/gochaos-app/isaac/config"
 )
 
-func ReadInitFile() *AWSConfig {
-	var config AWSConfig
+func ReadInitFile() *initCfg.InitConfig {
+	var cfg initCfg.InitConfig
 	homeEnv := os.Getenv("HOME")
 	filePath := homeEnv + "/.isaac_config.json"
 	_, error := os.Stat(filePath)
@@ -26,12 +27,12 @@ func ReadInitFile() *AWSConfig {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = json.Unmarshal(jsonFile, &config)
+	err = json.Unmarshal(jsonFile, &cfg)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	return &config
+	return &cfg
 }
 
 func GetAwsCfg() (string, string, string, string, string, aws.Config) {
