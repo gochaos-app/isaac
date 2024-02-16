@@ -24,6 +24,11 @@ func k8sPromptFn(cmdStr string) string {
 	return response
 }
 
+func imagePromptFn(cmdStr string) string {
+	response := ImageBD(cmdStr)
+	return response
+}
+
 func filePromptFn(cmdStr string) string {
 	SliceFile := strings.Fields(cmdStr)
 	filename := SliceFile[0]

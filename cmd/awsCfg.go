@@ -34,7 +34,7 @@ func ReadInitFile() *AWSConfig {
 	return &config
 }
 
-func GetAwsCfg() (string, string, string, string, aws.Config) {
+func GetAwsCfg() (string, string, string, string, string, aws.Config) {
 
 	isaacCfg := ReadInitFile()
 
@@ -44,5 +44,5 @@ func GetAwsCfg() (string, string, string, string, aws.Config) {
 		log.Fatal(err)
 	}
 
-	return isaacCfg.Model, isaacCfg.Tokens, isaacCfg.Temperature, isaacCfg.S3Bucket, cfg
+	return isaacCfg.Model, isaacCfg.ImageModel, isaacCfg.Tokens, isaacCfg.Temperature, isaacCfg.S3Bucket, cfg
 }

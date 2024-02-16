@@ -22,7 +22,7 @@ type Request struct {
 
 func ChatBD(cmdStr string) string {
 
-	model, tokens, temperature, _, cfg := GetAwsCfg()
+	model, _, tokens, temperature, _, cfg := GetAwsCfg()
 	brc := bedrockruntime.NewFromConfig(cfg)
 	tokensInt, _ := strconv.Atoi(tokens)
 	temperature64, _ := strconv.ParseFloat(temperature, 64)

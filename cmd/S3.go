@@ -9,7 +9,7 @@ import (
 )
 
 func Save2S3(name string) string {
-	_, _, _, bucket, cfg := GetAwsCfg()
+	_, _, _, _, bucket, cfg := GetAwsCfg()
 	if name == "" {
 		name = "prompts.jsonl"
 	}

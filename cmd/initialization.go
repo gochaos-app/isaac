@@ -10,6 +10,7 @@ import (
 type AWSConfig struct {
 	Region      string `json:"region"`
 	Model       string `json:"model"`
+	ImageModel  string `json:"imageModel"`
 	S3Bucket    string `json:"s3bucket"`
 	Tokens      string `json:"tokens"`
 	Temperature string `json:"temperature"`
@@ -46,6 +47,9 @@ func FileInit() {
 			fmt.Println("Enter AWS model:")
 			model, _ := reader.ReadString('\n')
 
+			fmt.Println("Enter Image model:")
+			imageModel, _ := reader.ReadString('\n')
+
 			fmt.Println("Enter Max tokens:")
 			tokens, _ := reader.ReadString('\n')
 
@@ -56,6 +60,7 @@ func FileInit() {
 				Region:      region[:len(region)-1],
 				S3Bucket:    s3bucket[:len(s3bucket)-1],
 				Model:       model[:len(model)-1],
+				ImageModel:  imageModel[:len(imageModel)-1],
 				Tokens:      tokens[:len(tokens)-1],
 				Temperature: temperature[:len(temperature)-1],
 			}
@@ -68,6 +73,7 @@ func FileInit() {
 			Region:      "us-east-1",
 			S3Bucket:    "isaac-bucket",
 			Model:       "ai21.j2-ultra-v1",
+			ImageModel:  "amazon.titan-image-generator-v1",
 			Tokens:      "200",
 			Temperature: "0.5",
 		}

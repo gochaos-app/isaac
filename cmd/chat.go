@@ -20,6 +20,7 @@ func switchCommand(IsaacCmd, cmdStr string) string {
 		"file":       filePromptFn,
 		"save":       savePrompts,
 		"uploadS3":   Save2S3,
+		"image":      imagePromptFn,
 	}
 	if _, cmdExists := cmdMap[IsaacCmd]; cmdExists {
 		return cmdMap[IsaacCmd](cmdStr)
@@ -63,7 +64,7 @@ func ChatBedrock() {
 			// If the user types yes, the command will be executed
 			if arrayCmd[0] == "command" {
 				cmd := ops.CleanCmd(response)
-				fmt.Println("Execute command? Only yes is accepted: " + cmd)
+				fmt.Println("Execute command? Only yes is accepted:" + cmd)
 				var userInput string
 				fmt.Scanf("%s", &userInput)
 				if userInput == "yes" {
