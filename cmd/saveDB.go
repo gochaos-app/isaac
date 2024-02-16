@@ -5,11 +5,6 @@ import (
 	"os"
 )
 
-type fileDB struct {
-	Prompt     string `json:"prompt"`
-	Completion string `json:"completion"`
-}
-
 func savePrompts(name string) string {
 	if name == "" {
 		name = "prompts.jsonl"
