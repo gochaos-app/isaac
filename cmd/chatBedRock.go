@@ -59,6 +59,7 @@ func ChatBD(cmdStr string) string {
 	fmt.Println(text)
 	return text
 }
+
 func getResponse(resp map[string]interface{}) string {
 	var textStr string
 	if completions, ok := resp["completions"]; ok {

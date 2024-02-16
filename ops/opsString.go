@@ -21,7 +21,7 @@ func FindCmd(IsaacStr, cmdStr string) string {
 }
 
 func CleanCmd(cmdStr string) string {
-	rx := regexp.MustCompile(`[^a-zA-Z0-9\s\-_./]`)
+	rx := regexp.MustCompile(`[^a-zA-Z0-9\s\-_./|]`)
 	clean := rx.ReplaceAllString(cmdStr, " ")
 	return clean
 }
