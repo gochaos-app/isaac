@@ -22,10 +22,10 @@ type Request struct {
 
 func ChatBD(cmdStr string) string {
 
-	model, _, tokens, temperature, _, cfg := GetAwsCfg()
-	brc := bedrockruntime.NewFromConfig(cfg)
-	tokensInt, _ := strconv.Atoi(tokens)
-	temperature64, _ := strconv.ParseFloat(temperature, 64)
+	varCfg := GetAwsCfg()
+	brc := bedrockruntime.NewFromConfig(*varCfg.AwsConfig)
+	tokensInt, _ := strconv.Atoi(varCfg.InitConfig.Tokens)
+	temperature64, _ := strconv.ParseFloat(varCfg.InitConfig.Temperature, 64)
 	payload := Request{
 		Prompt:      cmdStr,
 		MaxTokens:   tokensInt,
@@ -41,47 +41,34 @@ func ChatBD(cmdStr string) string {
 	output, err := brc.InvokeModel(context.Background(),
 		&bedrockruntime.InvokeModelInput{
 			Body:        payloadJson,
-			ModelId:     aws.String(model),
+			ModelId:     aws.String(varCfg.InitConfig.Model),
 			ContentType: aws.String(TypeContent),
 			Accept:      aws.String(AcceptContent),
 		})
 	if err != nil {
 		log.Fatal("Invoke Model error: ", err)
 	}
-	var result map[string]interface{}
-
-	err = json.Unmarshal(output.Body, &result)
+	//var resp Response
+	var resp map[string]interface{}
+	//text := result["completions"]
+	err = json.Unmarshal(output.Body, &resp)
 	if err != nil {
 		log.Fatal("failed to unmarshal", err)
 	}
-	aiResponse := getResponse(result)
-
-	fmt.Println(aiResponse)
-	return aiResponse
+	text := getResponse(resp)
+	fmt.Println(text)
+	return text
 }
-
 func getResponse(resp map[string]interface{}) string {
 	var textStr string
 	if completions, ok := resp["completions"]; ok {
-		// Assert that completions is a slice
-		if completionsSlice, ok := completions.([]interface{}); ok {
-			// Loop over the slice
-			for _, completion := range completionsSlice {
-				// Assert that completion is a map
-				if completionMap, ok := completion.(map[string]interface{}); ok {
-					// Extract the data
-					if data, ok := completionMap["data"]; ok {
-						// Assert that data is a map
-						if dataMap, ok := data.(map[string]interface{}); ok {
-							// Extract the text
-							if text, ok := dataMap["text"]; ok {
-								// Assert that text is a string
-								if textValue, ok := text.(string); ok {
-									textStr = textValue
-								}
-							}
-						}
-					}
+		// Loop over the slice
+		for _, completion := range completions.([]interface{}) {
+			// Extract the data
+			if data, ok := completion.(map[string]interface{})["data"]; ok {
+				// Extract the text
+				if text, ok := data.(map[string]interface{})["text"]; ok {
+					textStr = text.(string)
 				}
 			}
 		}

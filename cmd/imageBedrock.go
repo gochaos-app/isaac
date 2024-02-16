@@ -37,8 +37,9 @@ type TitanImageResponse struct {
 
 func ImageBD(cmdStr string) string {
 
-	_, model, _, _, _, cfg := GetAwsCfg()
-	brc := bedrockruntime.NewFromConfig(cfg)
+	varCfg := GetAwsCfg()
+
+	brc := bedrockruntime.NewFromConfig(*varCfg.AwsConfig)
 	seed := int64(123)
 	payload := TitanImageRequest{
 		TaskType: "TEXT_IMAGE",
@@ -63,7 +64,7 @@ func ImageBD(cmdStr string) string {
 	output, err := brc.InvokeModel(context.Background(),
 		&bedrockruntime.InvokeModelInput{
 			Body:        payloadJson,
-			ModelId:     aws.String(model),
+			ModelId:     aws.String(varCfg.InitConfig.ImageModel),
 			ContentType: aws.String(TypeContent),
 		})
 	if err != nil {

@@ -6,13 +6,13 @@ import (
 	"os"
 	"strings"
 
-	"github.com/gochaos-app/isaac/config"
+	"github.com/gochaos-app/isaac/cfgisaac"
 	"github.com/gochaos-app/isaac/ops"
 )
 
 type PromptFn func(string) string
 
-var entries []config.FileDB
+var entries []cfgisaac.FileDB
 
 func switchCommand(IsaacCmd, cmdStr string) string {
 	cmdMap := map[string]PromptFn{
@@ -55,12 +55,12 @@ func ChatBedrock() {
 		if len(arrayCmd) == 1 {
 			//send input to bedrock
 			response := ChatBD(cmdStr)
-			entries = append(entries, config.FileDB{Prompt: cmdStr, Completion: response})
+			entries = append(entries, cfgisaac.FileDB{Prompt: cmdStr, Completion: response})
 
 		} else if len(arrayCmd) > 1 {
 			//CHeck if a special command was used other than exit and send the input to bedrock
 			response := switchCommand(arrayCmd[0], arrayCmd[1])
-			entries = append(entries, config.FileDB{Prompt: cmdStr, Completion: response})
+			entries = append(entries, cfgisaac.FileDB{Prompt: cmdStr, Completion: response})
 			// If the input is command ask if the user wants to execute the command
 			// If the user types yes, the command will be executed
 			if arrayCmd[0] == "command" {

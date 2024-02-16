@@ -5,16 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-)
 
-type AWSConfig struct {
-	Region      string `json:"region"`
-	Model       string `json:"model"`
-	ImageModel  string `json:"imageModel"`
-	S3Bucket    string `json:"s3bucket"`
-	Tokens      string `json:"tokens"`
-	Temperature string `json:"temperature"`
-}
+	"github.com/gochaos-app/isaac/cfgisaac"
+)
 
 func FileInit() {
 
@@ -56,7 +49,7 @@ func FileInit() {
 			fmt.Println("Enter Temperature:")
 			temperature, _ := reader.ReadString('\n')
 
-			config := AWSConfig{
+			config := cfgisaac.InitConfig{
 				Region:      region[:len(region)-1],
 				S3Bucket:    s3bucket[:len(s3bucket)-1],
 				Model:       model[:len(model)-1],
@@ -69,7 +62,7 @@ func FileInit() {
 
 	} else {
 		fmt.Println("Using defaults...")
-		config := AWSConfig{
+		config := cfgisaac.InitConfig{
 			Region:      "us-east-1",
 			S3Bucket:    "isaac-bucket",
 			Model:       "ai21.j2-ultra-v1",

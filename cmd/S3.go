@@ -9,7 +9,7 @@ import (
 )
 
 func Save2S3(name string) string {
-	_, _, _, _, bucket, cfg := GetAwsCfg()
+	varCfg := GetAwsCfg()
 	if name == "" {
 		name = "prompts.jsonl"
 	}
@@ -19,7 +19,8 @@ func Save2S3(name string) string {
 	}
 
 	defer fileJsonl.Close()
-	svc := s3.NewFromConfig(cfg)
+	bucket := varCfg.InitConfig.S3Bucket
+	svc := s3.NewFromConfig(*varCfg.AwsConfig)
 	_, err = svc.PutObject(context.TODO(), &s3.PutObjectInput{
 		Bucket: aws.String(bucket),
 		Key:    aws.String(name),

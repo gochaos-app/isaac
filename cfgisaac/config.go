@@ -1,4 +1,4 @@
-package config
+package cfgisaac
 
 import (
 	"github.com/aws/aws-sdk-go-v2/aws"

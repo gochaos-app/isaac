@@ -7,13 +7,12 @@ import (
 	"log"
 	"os"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
-	initCfg "github.com/gochaos-app/isaac/config"
+	"github.com/gochaos-app/isaac/cfgisaac"
 )
 
-func ReadInitFile() *initCfg.InitConfig {
-	var cfg initCfg.InitConfig
+func ReadInitFile() *cfgisaac.InitConfig {
+	var cfg cfgisaac.InitConfig
 	homeEnv := os.Getenv("HOME")
 	filePath := homeEnv + "/.isaac_config.json"
 	_, error := os.Stat(filePath)
@@ -35,7 +34,7 @@ func ReadInitFile() *initCfg.InitConfig {
 	return &cfg
 }
 
-func GetAwsCfg() (string, string, string, string, string, aws.Config) {
+func GetAwsCfg() cfgisaac.IsaacConfig {
 
 	isaacCfg := ReadInitFile()
 
@@ -44,6 +43,10 @@ func GetAwsCfg() (string, string, string, string, string, aws.Config) {
 		fmt.Println("Unable to load SDK config, " + err.Error())
 		log.Fatal(err)
 	}
+	isaac := cfgisaac.IsaacConfig{
+		InitConfig: *isaacCfg,
+		AwsConfig:  &cfg,
+	}
 
-	return isaacCfg.Model, isaacCfg.ImageModel, isaacCfg.Tokens, isaacCfg.Temperature, isaacCfg.S3Bucket, cfg
+	return isaac
 }
