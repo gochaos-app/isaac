@@ -26,7 +26,7 @@ Special commands in chat mode:
 * **command**:    User can input what it wnats to do and Isaac will return a posssible command to use as well as ask for confirmation. 
 
 * **kubernetes**: Ask kubernetes related questions and the response will be a kubectl command as well with a brief explanation of the command.
-
+* **image**: Input this command followed by a prompt, an `image.png` will be created in the current working directory. 
 * **file**: load a file and ask for a summary or review general written code.
 * **save**: save the prompts in a file, default name `prompts.jsonl`.
 
