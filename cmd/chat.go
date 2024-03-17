@@ -57,6 +57,7 @@ func ChatBedrock() {
 			//send input to bedrock
 			response := ChatBD(cmdStr)
 			entries = append(entries, cfgisaac.FileDB{Prompt: cmdStr, Completion: response})
+			fmt.Println(response)
 
 		} else if len(arrayCmd) > 1 {
 			//CHeck if a special command was used other than exit and send the input to bedrock

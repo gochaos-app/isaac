@@ -41,7 +41,7 @@ func TextFromDoc(file, prompt string) {
 		prompt = "This text is taken from a file, file can be document, image or a PDF file, could you please review the text and tell me a small summary, what is this about or what is the main idea of this text? \n"
 	}
 	fmt.Println("------------------------------------------")
-	fmt.Println("Text from file: \n", textFromFile)
+	fmt.Println("Text from file: ", file)
 	fmt.Println("------------------------------------------")
 	fmt.Println(textFromFile)
 	fmt.Println("------------------------------------------")
