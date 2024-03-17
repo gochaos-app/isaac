@@ -19,6 +19,7 @@ func switchCommand(IsaacCmd, cmdStr string) string {
 		"command":    cmdPromptFn,
 		"kubernetes": k8sPromptFn,
 		"file":       filePromptFn,
+		"document":   textFromFileFn,
 		"save":       savePrompts,
 		"uploadS3":   Save2S3,
 		"image":      imagePromptFn,

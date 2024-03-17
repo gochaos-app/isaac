@@ -29,10 +29,19 @@ func imagePromptFn(cmdStr string) string {
 	return response
 }
 
+func textFromFileFn(cmdStr string) string {
+	SliceFile := strings.Fields(cmdStr)
+	filename := SliceFile[0]
+
+	prompt := strings.Join(SliceFile[1:], " ")
+	TextFromDoc(filename, prompt)
+	return ""
+}
+
 func filePromptFn(cmdStr string) string {
 	SliceFile := strings.Fields(cmdStr)
 	filename := SliceFile[0]
-	prompt := strings.Join(SliceFile[2:], " ")
+	prompt := strings.Join(SliceFile[1:], " ")
 
 	file, err := ops.LoadFile(filename)
 

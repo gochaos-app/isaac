@@ -3,9 +3,12 @@ package cmd
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"image/png"
 	"log"
 	"os"
+	"strconv"
+	"time"
 
 	"encoding/base64"
 	"encoding/json"
@@ -86,10 +89,15 @@ func ImageBD(cmdStr string) string {
 	if err != nil {
 		log.Fatal("bad image: failed to decode", err)
 	}
-	f, err := os.OpenFile("image.png", os.O_WRONLY|os.O_CREATE, 0600)
+	timestamp := time.Now().Unix()
+	timestampStr := strconv.FormatInt(timestamp, 10)
+
+	imageName := timestampStr + ".png"
+	f, err := os.OpenFile(imageName, os.O_WRONLY|os.O_CREATE, 0600)
 	if err != nil {
 		log.Fatal("failed to open file", err)
 	}
 	png.Encode(f, im)
-	return "Image generated and saved as image.png"
+	fmt.Println("Image generated and saved as " + imageName)
+	return "Image generated and saved as " + imageName
 }

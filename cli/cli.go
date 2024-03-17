@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"errors"
 	"log"
 	"os"
 
@@ -20,6 +21,20 @@ func InitCli() {
 				Action: func(c *cli.Context) error {
 
 					cmd.FileInit()
+					return nil
+				},
+			},
+			{
+				Name:    "document",
+				Aliases: []string{"d"},
+				Usage:   "Get text out of a document, file or an image",
+				Action: func(c *cli.Context) error {
+					filename := c.Args().Get(0)
+					if _, err := os.Stat(filename); err != nil {
+						err := errors.New("File does not exist")
+						return err
+					}
+					cmd.TextFromDoc(filename, "")
 					return nil
 				},
 			},
