@@ -19,6 +19,18 @@ type Request struct {
 	StopSequences []string `json:"stop_sequences,omitempty"`
 }
 
+type Response struct {
+	Completions []Completion `json:"completions"`
+}
+
+type Completion struct {
+	Data Data `json:"data"`
+}
+
+type Data struct {
+	Text string `json:"text"`
+}
+
 func ChatBD(cmdStr string) string {
 
 	varCfg := GetAwsCfg()
@@ -47,31 +59,16 @@ func ChatBD(cmdStr string) string {
 	if err != nil {
 		log.Fatal("Invoke Model error: ", err)
 	}
-	//var resp Response
-	var resp map[string]interface{}
-	//text := result["completions"]
+	var resp Response
+	if err := json.Unmarshal(output.Body, &resp); err != nil {
+		log.Fatal("failed to unmarshal", err)
+	}
+
 	err = json.Unmarshal(output.Body, &resp)
 	if err != nil {
 		log.Fatal("failed to unmarshal", err)
 	}
-	text := getResponse(resp)
 
+	text := resp.Completions[0].Data.Text
 	return text
-}
-
-func getResponse(resp map[string]interface{}) string {
-	var textStr string
-	if completions, ok := resp["completions"]; ok {
-		// Loop over the slice
-		for _, completion := range completions.([]interface{}) {
-			// Extract the data
-			if data, ok := completion.(map[string]interface{})["data"]; ok {
-				// Extract the text
-				if text, ok := data.(map[string]interface{})["text"]; ok {
-					textStr = text.(string)
-				}
-			}
-		}
-	}
-	return textStr
 }
