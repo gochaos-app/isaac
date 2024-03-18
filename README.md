@@ -15,21 +15,21 @@ USAGE:
    Isaac [global options] command [command options] [arguments...]
 
 COMMANDS:
-   init, i    Initialize Isaac
-   chat, c    Chat with Isaac
-   prompt, p  make a simple prompt, prompt should be enclosed in quotes
-   help, h    Shows a list of commands or help for one command
+   init, i     Initialize Isaac
+   document,d  Get text out of a document, file or an image
+   chat, c     Chat with Isaac
+   prompt, p   make a simple prompt, prompt should be enclosed in quotes
+   help, h     Shows a list of commands or help for one command
 ```
 
 Special commands in chat mode: 
 
 * **command**:    User can input what it wnats to do and Isaac will return a posssible command to use as well as ask for confirmation. 
-
 * **kubernetes**: Ask kubernetes related questions and the response will be a kubectl command as well with a brief explanation of the command.
 * **image**: Input this command followed by a prompt, an `image.png` will be created in the current working directory. 
-* **file**: load a file and ask for a summary or review general written code.
+* **file**: load a text file and ask for a summary or review general written code.
 * **save**: save the prompts in a file, default name `prompts.jsonl`.
-
+* **document** Get text out of an image or pdf file, you can make a prompt to review, summarize or other query about the extracted text.
 * **uploadS3**:  Upload prompts file to an s3 specified in init file.
 
 
@@ -45,11 +45,7 @@ memory, and disk I/O. You can also use the "ps" command to list the currently ru
 interactive version of top.
 
 @Isaac → command: check the running process in linux
-
-```ps```
-Execute command? Only yes is accepted: 
-   ps   
-yes 
+Execute command? ps aux Only yes is accepted: yes
 
 PID TTY          TIME CMD
 52 pts/2    00:00:00 sh
@@ -78,8 +74,17 @@ Targets starting with "prod" are used to compile and build the "isaac" program w
 
 Targets starting with "install" are used to perform the installation and deployment of the "isaac" program. The "install" target first performs the "prod" target, and then performs the "move" target, which moves the compiled binary
 
+@Isaac → document:mycv.pdf Tell me how could I make my cv better 
+------------------------------------------
+Text from file:  cv_ramon_esparza.pdf
+------------------------------------------
+...
+------------------------------------------
+Summary
+------------------------------------------
+...
 
-@Isaac: sys.exit
+@Isaac →  sys.exit
 Goodbye!
 
 ````
@@ -94,4 +99,16 @@ With AWS, my customers can access a wide range of computing, storage, and networ
 AWS also offers a wide range of tools and features to help my customers manage their infrastructure, including identity and access management, security, and automation.
 ```
 
-
+You can also extract text from documents in prompt mode. 
+```
+isaac document linkedinProfile.png
+------------------------------------------
+Text from file:  linkedinProfile.png
+------------------------------------------
+... Text from file ...
+------------------------------------------
+Summary: 
+------------------------------------------
+... Summary from aws bedrock ...
+------------------------------------------
+```
