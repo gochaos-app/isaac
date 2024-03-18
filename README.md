@@ -76,7 +76,7 @@ Targets starting with "install" are used to perform the installation and deploym
 
 @Isaac → document:mycv.pdf Tell me how could I make my cv better 
 ------------------------------------------
-Text from file:  cv_ramon_esparza.pdf
+Text from file: mycv.pdf
 ------------------------------------------
 ...
 ------------------------------------------
