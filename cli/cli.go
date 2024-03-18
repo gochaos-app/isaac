@@ -2,6 +2,7 @@ package cli
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"os"
 
@@ -53,7 +54,7 @@ func InitCli() {
 				Usage:   "make a simple prompt, prompt should be enclosed in quotes",
 				Action: func(c *cli.Context) error {
 
-					cmd.ChatBD(c.Args().First())
+					fmt.Println(cmd.ChatBD(c.Args().First()))
 					return nil
 				},
 			},
