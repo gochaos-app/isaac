@@ -126,6 +126,7 @@ Have isaac generate an image with a single prompt
 isaac img "Make an image for a guy working in a computer with his linux terminal opened and writing some command"
 Image generated and saved as 1710736420.png
 ```
+![1710736420](https://github.com/gochaos-app/isaac/assets/47430149/0c6b152c-91fc-42c1-b60e-79a2fca8d830)
 
 You can also extract text from documents in prompt mode. 
 ```
