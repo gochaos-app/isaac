@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"context"
+	"fmt"
 	"os"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -27,8 +28,10 @@ func Save2S3(name string) string {
 		Body:   fileJsonl,
 	})
 	if err != nil {
+		fmt.Println("Error uploading to S3", err)
 		return err.Error()
 	}
+	fmt.Println("Successfully uploaded to S3 " + bucket)
 	return "Successfully uploaded to S3 " + bucket
 
 }
