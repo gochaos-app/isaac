@@ -1,7 +1,6 @@
 package ops
 
 import (
-	"fmt"
 	"regexp"
 	"strings"
 )
@@ -11,13 +10,18 @@ func FindInst(cmdStr string) []string {
 	return split
 }
 
-func FindCmd(IsaacStr, cmdStr string) string {
-	rx := regexp.MustCompile(IsaacStr + `:(.*)`)
-	matches := rx.FindStringSubmatch(cmdStr)
-	if len(matches) > 1 {
-		fmt.Println(matches[1])
+func ExtractCodeBlocks(input string) []string {
+	rx := regexp.MustCompile("```(.+?)```")
+	matches := rx.FindAllStringSubmatch(input, -1)
+
+	var results []string
+	for _, match := range matches {
+		if len(match) > 1 {
+			results = append(results, match[1])
+		}
 	}
-	return matches[1]
+
+	return results
 }
 
 func CleanCmd(cmdStr string) string {

@@ -66,8 +66,13 @@ func ChatBedrock() {
 			// If the input is command ask if the user wants to execute the command
 			// If the user types yes, the command will be executed
 			if arrayCmd[0] == "command" {
-				cmd := ops.CleanCmd(response)
-				fmt.Printf("Execute command? %s", cmd)
+				cmdArray := ops.ExtractCodeBlocks(response)
+				if len(cmdArray) == 0 {
+					fmt.Println("No command to execute, please try another prompt...")
+					return
+				}
+				cmd := strings.Join(cmdArray, " ")
+				fmt.Printf("Execute command? %s ", cmd)
 				var userInput string
 				fmt.Print("Only yes is accepted: ")
 				fmt.Scanf("%s", &userInput)
