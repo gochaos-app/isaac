@@ -1,11 +1,12 @@
 # Isaac
 
-Isaac is a basic CLI with AI integrated. 
+Isaac the smart CLI with AWS Bedrock integrated.
 
 https://github.com/gochaos-app/isaac/assets/47430149/fd934c52-ef6b-453b-8bab-0572c8613b4e
 
 ## Introduction
-Isaac has two modes, chat and prompt mode.
+A smart CLI that has AWS Bedrock and AWS Textract integrated. It can perform several functions that 
+gives power to terminal users. 
 
 ```
 NAME:
@@ -17,10 +18,33 @@ USAGE:
 COMMANDS:
    init, i     Initialize Isaac
    document,d  Get text out of a document, file or an image
+   image, img   Make an image with a prompt
    chat, c     Chat with Isaac
-   prompt, p   make a simple prompt, prompt should be enclosed in quotes
+   prompt, p   Make a simple prompt, prompt should be enclosed in quotes
    help, h     Shows a list of commands or help for one command
 ```
+
+## Installation
+
+The installation of Isaac is really simple:
+```
+git clone https://github.com/gochaos-app/isaac.git
+cd isaac
+make install
+```
+
+Make sure that go 1.21 is installed, as well as Make.
+The command `make install` creates the binary and moves it into $HOME/bin
+make sure this directory exists and is in your PATH `export PATH=$PATH:/home/bin`.
+
+If you prefer to have Isaac in other directory such as `/usr/local/bin`
+
+```
+make prod
+mv isaac /usr/local/bin
+```
+
+## Usage
 
 Special commands in chat mode: 
 
@@ -32,8 +56,6 @@ Special commands in chat mode:
 * **document** Get text out of an image or pdf file, you can make a prompt to review, summarize or other query about the extracted text.
 * **uploadS3**:  Upload prompts file to an s3 specified in init file.
 
-
-## Usage
 
 ````markdown
 isaac chat
@@ -90,13 +112,19 @@ Goodbye!
 ````
 
 ### Prompt mode
-
+Make a single prompt and get the response directly in the terminal.
 ```
 isaac prompt "write a 3 line paragraph about AWS and how can it help my customers"
 
 AWS is a comprehensive suite of cloud computing services that can help my customers reduce costs, improve efficiency, and scale their businesses. 
 With AWS, my customers can access a wide range of computing, storage, and networking resources, allowing them to focus on their core businesses rather than on infrastructure management. 
 AWS also offers a wide range of tools and features to help my customers manage their infrastructure, including identity and access management, security, and automation.
+```
+
+Have isaac generate an image with a single prompt 
+```
+isaac img "Make an image for a guy working in a computer with his linux terminal opened and writing some command"
+Image generated and saved as 1710736420.png
 ```
 
 You can also extract text from documents in prompt mode. 

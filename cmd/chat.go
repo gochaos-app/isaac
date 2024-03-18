@@ -37,7 +37,6 @@ func ChatBedrock() {
 	reader := bufio.NewReader(os.Stdin)
 
 	for {
-
 		fmt.Print("@Isaac → ")
 		cmdStr, _ := reader.ReadString('\n')
 

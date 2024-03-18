@@ -40,6 +40,15 @@ func InitCli() {
 				},
 			},
 			{
+				Name:    "image",
+				Aliases: []string{"img"},
+				Usage:   "Make an image with a prompt",
+				Action: func(c *cli.Context) error {
+					cmd.ImageBD(c.Args().First())
+					return nil
+				},
+			},
+			{
 				Name:    "chat",
 				Aliases: []string{"c"},
 				Usage:   "Chat with Isaac",
@@ -51,7 +60,7 @@ func InitCli() {
 			{
 				Name:    "prompt",
 				Aliases: []string{"p"},
-				Usage:   "make a simple prompt, prompt should be enclosed in quotes",
+				Usage:   "Make a simple prompt, prompt should be enclosed in quotes",
 				Action: func(c *cli.Context) error {
 
 					fmt.Println(cmd.ChatBD(c.Args().First()))
