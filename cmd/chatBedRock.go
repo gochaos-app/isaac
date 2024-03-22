@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"strconv"
 
@@ -70,5 +71,6 @@ func ChatBD(cmdStr string) string {
 	}
 
 	text := resp.Completions[0].Data.Text
+	fmt.Println(text)
 	return text
 }

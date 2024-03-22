@@ -16,13 +16,12 @@ var entries []cfgisaac.FileDB
 
 func switchCommand(IsaacCmd, cmdStr string) string {
 	cmdMap := map[string]PromptFn{
-		"command":    cmdPromptFn,
-		"kubernetes": k8sPromptFn,
-		"file":       filePromptFn,
-		"document":   textFromFileFn,
-		"save":       savePrompts,
-		"uploadS3":   Save2S3,
-		"image":      imagePromptFn,
+		"command":  cmdPromptFn,
+		"file":     filePromptFn,
+		"document": textFromFileFn,
+		"save":     savePrompts,
+		"uploadS3": Save2S3,
+		"image":    imagePromptFn,
 	}
 	if _, cmdExists := cmdMap[IsaacCmd]; cmdExists {
 		return cmdMap[IsaacCmd](cmdStr)
@@ -56,7 +55,6 @@ func ChatBedrock() {
 			//send input to bedrock
 			response := ChatBD(cmdStr)
 			entries = append(entries, cfgisaac.FileDB{Prompt: cmdStr, Completion: response})
-			fmt.Println(response)
 
 		} else if len(arrayCmd) > 1 {
 			//CHeck if a special command was used other than exit and send the input to bedrock
